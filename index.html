@@ -1,80 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Scientific Calculator</title>
-    <style>
-        .calculator {
-            max-width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .calculator input[type="text"] {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-        }
-        .calculator input[type="button"] {
-            width: 32%;
-            margin-bottom: 5px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-        .calculator input[type="button"]:nth-child(4) {
-            width: 100%;
-        }
-        .calculator input[type="button"]:nth-child(5) {
-            width: 48%;
-        }
-        .calculator input[type="button"]:nth-child(18) {
-            width: 100%;
-        }
-        .calculator input[type="button"]:nth-child(19) {
-            width: 48%;
-        }
-    </style>
+  <title>Overcurrent Setting Calculation for Transformer</title>
 </head>
 <body>
-    <div class="calculator">
-        <input type="text" id="display" onkeydown="handleKeyPress(event)" autofocus>
-    </div>
-    <script>
-        function handleKeyPress(event) {
-            const key = event.key;
-            const validKeys = [
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '.', '(', ')', 'Enter'
-            ];
-            
-            if (validKeys.includes(key)) {
-                if (key === 'Enter') {
-                    calculate();
-                } else {
-                    addToDisplay(key);
-                }
-            }
-        }
+  <h1>Inline JavaScript Calculation Example</h1>
+  
+  <label for="num1Input">Transformer MVA rating:</label>
+  <input type="number" id="num1Input"><br>
 
-        function addToDisplay(value) {
-            document.getElementById('display').value += value;
-        }
+  <label for="num8Input">% Z</label>
+  <input type="number" id="num8Input"><br>
+  
+  <label for="num2Input">HV Line Voltage</label>
+  <input type="number" id="num2Input"><br>
 
-        function applyFunction(func) {
-            let displayValue = document.getElementById('display').value;
-            let result = eval(func + '(' + displayValue + ')');
-            document.getElementById('display').value = result;
-        }
+  <label for="num3Input">LV Line Voltage</label>
+  <input type="number" id="num3Input"><br>
 
-        function calculate() {
-            let displayValue = document.getElementById('display').value;
-            let result = eval(displayValue);
-            document.getElementById('display').value = result;
-        }
+  <label for="num4Input">HV CT Primary</label>
+  <input type="number" id="num4Input"><br>
 
-        function clearDisplay() {
-            document.getElementById('display').value = '';
-        }
-    </script>
+  <label for="num5Input">HV CT Secondary</label>
+  <input type="number" id="num5Input"><br>
+
+  <label for="num6Input">LV CT Primary</label>
+  <input type="number" id="num6Input"><br>
+
+  <label for="num7Input">LV CT Secondary</label>
+  <input type="number" id="num7Input"><br>
+  
+  <button onclick="performCalculations()">Calculate</button>
+  
+  <h3>Results:</h3>
+  <output id="iFlLv"></output><br>
+  <output id="iFlHv"></output><br>
+  <output id="iFaultLv"></output><br>
+  <output id="iFaultHv"></output>
+  
+  <script>
+    function performCalculations() {
+      var mva = parseFloat(document.getElementById("num1Input").value);
+      var hvLineV = parseFloat(document.getElementById("num2Input").value);
+      var lvLineV = parseFloat(document.getElementById("num3Input").value);
+      var hvCtP = parseFloat(document.getElementById("num4Input").value);
+      var hvCtS = parseFloat(document.getElementById("num5Input").value);
+      var lvCtP = parseFloat(document.getElementById("num6Input").value);
+      var lvCtS = parseFloat(document.getElementById("num7Input").value);
+      var pZ = parseFloat(document.getElementById("num8Input").value);
+      
+      var iFlLv = document.getElementById("iFlLv");
+
+     //   full load current
+      var fullLoadCurrentLv = (mva * 1000)/(1.7320 * lvLineV);
+      iFlLv.textContent = "I full load (LV) : " + ( fullLoadCurrentLv);
+      
+      var iFlHv = document.getElementById("iFlHv");
+      var fullLoadCurrentHv = (mva * 1000)/(1.7320 * hvLineV);
+      iFlHv.textContent = "I full load (HV) : " + (fullLoadCurrentHv);
+      
+      var iFaultLv = document.getElementById("iFaultLv");
+      iFaultLv.textContent = "I fault LV : " + ((fullLoadCurrentLv/pZ)*100);
+      
+      var iFaultHv = document.getElementById("iFaultHv");
+      iFaultHv.textContent = "I fault HV : " + ((fullLoadCurrentHv/pZ)*100);
+
+    }
+  </script>
 </body>
 </html>
+
